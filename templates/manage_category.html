@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Articles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src='https://code.jquery.com/jquery-3.5.1.slim.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+    <script>
+
+        // When the user clicks on the button, open the modal 
+        function popupAdd() {
+            alert("Thêm bài báo thành công")
+        }
+        function popupDelete() {
+            alert("Xóa bài báo thành công")
+        }
+        function popupUpdate() {
+            alert("Cập nhật bài báo thành công")
+        }
+        function updateArticle(category) {
+    const url = document.getElementById('updated-url').value;
+    const title = document.getElementById('updated-title').value;
+    const summary = document.getElementById('updated-summary').value;
+    const content = document.getElementById('updated-content').value;
+    const date = document.getElementById('updated-date').value;
+    const author = document.getElementById('updated-author').value;
+    const tags = document.getElementById('updated-tags').value;
+    console.log("Form Data:", { url, title, summary, content, date, author });
+    fetch(`/update/${category}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            url,
+            title,
+            summary,
+            content,
+            date,
+            author,
+            tags
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Bài báo đã được cập nhật thành công!");
+            window.location.reload();
+        } else {
+            alert("Có lỗi xảy ra. Vui lòng thử lại.");
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+    </script>
+</head>
+
+<body>
+
+    <div>
+
+        <h1 class="text-center">Quản lý các bài báo</h1>
+
+        <div class="container-fluid">
+
+            <table>
+
+                <tr>
+
+                    <td style="width: 600px;">
+
+                        <div class="card-header">Thêm bài báo</div>
+
+                        <div class="card-body">
+                            <form id="article-form" method="POST">
+                                <div class="form-group">
+                                    <label for="url">Đường dẫn:</label>
+                                    <input type="text" class="form-control" id="url" name="url" placeholder="Nhập đường dẫn bài báo"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="title">Tiêu đề:</label>
+                                    <input type="text" class="form-control" id="title" name="title"
+                                        placeholder="Nhập tiêu đề bài báo" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="summary">Tóm tắt:</label>
+                                    <textarea class="form-control" id="summary" name="summary" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="content">Nội dung:</label>
+                                    <textarea class="form-control" id="content" name="content" rows=5></textarea>
+                                </div>
+
+                                <div class='form-group'>
+                                    <label for='date'>Thời gian bài đăng:</label><br />
+                                    <input type='date' id='date' name="date" required />
+                                </div>
+                                <div class='form-group'>
+                                    <label for='date'>Tác giả:</label><br />
+                                    <textarea class="form-control" id="author" name="author" rows=5></textarea>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='date'>Tags:</label><br />
+                                    <textarea class="form-control" id="tags" name="tags" rows=5></textarea>
+                                </div>
+                                <button onclick="popupAdd()" type='submit' class='btn btn-primary'>Thêm bài báo</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td style="width: 600px;">
+                        <div class="card-header">Cập nhật bài báo</div>
+
+                        <div class="card-body">
+                            <form id="article-form" onsubmit="event.preventDefault(); updateArticle('{{category}}')">
+                                <div class="form-group">
+                                    <label for="url">Đường dẫn:</label>
+                                    <input type="text" class="form-control" id="updated-url" name="url" placeholder="Nhập đường dẫn bài báo cần cập nhật"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="title">Tiêu đề:</label>
+                                    <input type="text" class="form-control" id="updated-title" name="title"
+                                        placeholder="Nhập tiêu đề bài báo" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="summary">Tóm tắt:</label>
+                                    <textarea class="form-control" id="updated-summary" name="summary" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="content">Nội dung:</label>
+                                    <textarea class="form-control" id="updated-content" name="content" rows=5></textarea>
+                                </div>
+
+                                <div class='form-group'>
+                                    <label for='date'>Thời gian bài đăng:</label><br />
+                                    <input type='date' id='updated-date' name="date" required />
+                                </div>
+                                <div class='form-group'>
+                                    <label for='date'>Tác giả:</label><br />
+                                    <textarea class="form-control" id="updated-author" name="author" rows=5></textarea>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='date'>Tags:</label><br />
+                                    <textarea class="form-control" id="updated-tags" name="tags" rows=5></textarea>
+                                </div>
+                                <button type='submit' class='btn btn-primary'>Cập nhật bài báo</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td style="width: 400px;">
+                        <div class="card-header">Xóa một bài báo</div>
+                        <div class="card-body">
+                            <form id="article-form" method="POST" action="/delete/{{category}}">
+                                <div class="form-group">
+                                    <label for="url">Đường dẫn:</label>
+                                    <input type="text" class="form-control" id="url" name="url" placeholder="Nhập đường dẫn bài báo"
+                                        required>
+                                </div>
+
+                                <button onclick="popupDelete()" type='submit' class='btn btn-danger'>Xóa bài báo</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td style="width: 400px;">
+                        <div class="card-header">Tìm kiếm một bài báo</div>
+                        <div class="card-body">
+                            <form id="article-form" method="GET" action='/get/{{category}}'>
+                                <div class="form-group">
+                                    <label for="url">Đường dẫn:</label>
+                                    <input type="text" class="form-control" id="get_article_url" name="url"
+                                        placeholder="Nhập đường dẫn bài báo" required>
+                                </div>
+
+                                <button type='submit' class='btn btn-primary'>Tìm kiếm</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Articles Table -->
+    <table class='table table-striped table-dark'>
+        <thead>
+
+            <tr>
+                <th>Đường dẫn</th>
+                <th>Tiêu đề</th>
+                <th>Tóm tắt</th>
+                <th>Nội dung</th>
+                <th>Thời gian bài đăng</th>
+                <th>Tác giả</th>
+            </tr>
+
+        </thead>
+        <tbody id='articles-list'>
+            {% for article in articles %}
+
+            <tr>
+                <td>{{ article[1] }}</td>
+                <td>{{article[2]}}</td>
+                <td>{{article[3]}} </td>
+                <td>{{article[4]}}</td>
+                <td>{{article[5]}}</td>
+                <td>{{article[6]}}</td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+</body>
+
+</html>
